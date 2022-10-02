@@ -9,7 +9,7 @@ This repository provides the official implementation of the following paper:
 [Ismail Elezi](https://dvl.in.tum.de/team/elezi/),
 [Deva Ramanan](https://www.cs.cmu.edu/~deva/),
 [Aljoša Ošep](https://dvl.in.tum.de/team/osep/),
-[Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/ <br/>
+[Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/) <br/>
 In Advances in Neural Information Processing Systems 34 (NeurIPS 2022). <br/>
 [Project page](https://vlfom.github.io/rncdl/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
 
