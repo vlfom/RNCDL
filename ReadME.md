@@ -11,7 +11,7 @@ This repository provides the official implementation of the following paper:
 [Aljoša Ošep](https://dvl.in.tum.de/team/osep/),
 [Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/) <br/>
 In Advances in Neural Information Processing Systems 35 (NeurIPS 2022). <br/>
-[Project page](https://vlfom.github.io/rncdl/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
+[Project page](https://vlfom.github.io/RNCDL/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
 
 > **Abstract**: We tackle the problem of novel class discovery, detection, and localization (NCDL). In this setting, we assume a source dataset with labels for objects of commonly observed classes. Instances of other classes need to be discovered, classified, and localized automatically based on visual similarity, without human supervision. To this end, we propose a two-stage object detection network RNCDL, that uses a region proposal network to localize potential objects and classify them. We train our network to classify each proposal, either as one of the known classes, seen in the source dataset, or one of the extended set of novel classes with a constraint that the distribution of class assignments should follow natural long-tail distributions common in the real open-world. By training our detection network with this objective in an end-to-end manner, it learns to classify all region proposals for a large variety of classes, including those that are not part of the labeled object class vocabulary.
 
