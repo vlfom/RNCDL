@@ -1,13 +1,26 @@
 # Learning to Discover and Detect Objects
 
-This repository contains an official implementation of the Region-based Novel Class Discovery, Detection and Localization (RNCDL) method.
+<img src="./docs/assets/figures/qualitative_results.webp" class="qualitative_teaser">
 
-Our implementation is based on the [Detectron2](https://github.com/facebookresearch/detectron2) framework.
+This repository provides the official implementation of the following paper:
+
+**Learning to Discover and Detect Objects**
+
+[Vladimir Fomenko](https://github.com/vlfom/),
+[Ismail Elezi](https://dvl.in.tum.de/team/elezi/),
+[Deva Ramanan](https://www.cs.cmu.edu/~deva/),
+[Aljoša Ošep](https://dvl.in.tum.de/team/osep/),
+[Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/)
+
+In Advances in Neural Information Processing Systems 34 (NeurIPS 2022).
+
+[Project page](https://vlfom.github.io/rncdl/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#)
+
+> **Abstract**: We tackle the problem of novel class discovery, detection, and localization (NCDL). In this setting, we assume a source dataset with labels for objects of commonly observed classes. Instances of other classes need to be discovered, classified, and localized automatically based on visual similarity, without human supervision. To this end, we propose a two-stage object detection network RNCDL, that uses a region proposal network to localize potential objects and classify them. We train our network to classify each proposal, either as one of the known classes, seen in the source dataset, or one of the extended set of novel classes with a constraint that the distribution of class assignments should follow natural long-tail distributions common in the real open-world. By training our detection network with this objective in an end-to-end manner, it learns to classify all region proposals for a large variety of classes, including those that are not part of the labeled object class vocabulary.
 
 # Installation
 
-Please follow [Detectron2's setup guide](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) and pick the **CUDA=11.3** and **torch=1.10** versions (e.g. `python -m pip install detectron2 -f \
-  https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html` may work). We do not require any additional dependencies, apart from the default ones used by Detectron2.
+Our implementation is based on the [Detectron2](https://github.com/facebookresearch/detectron2) framework. Please follow [Detectron2's setup guide](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) and pick the **CUDA=11.3** and **torch=1.10** versions (`python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html` may work). We do not require any additional dependencies, apart from the default ones used by Detectron2.
 
 ## Download datasets
 
@@ -15,13 +28,13 @@ For COCO + LVIS experiments, download COCO and LVIS datasets as instructed in th
 
 **Note on LVIS + VisualGenome experiments:** LVIS and VisualGenome datasets largely overlap (50K images). VisualGenome does not provide a default train-val split and for our setup we devised a specific split so that the validation images are those that appear in LVIS validation split and can be found in VisualGenome. For more details, please see our paper (supplementary).
 
-For LVIS + VisualGenome experiments, first download LVIS dataset as instructed above. For VisualGenome dataset we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images from the [official website](#). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](#). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
+For LVIS + VisualGenome experiments, first download LVIS dataset as instructed above. For VisualGenome dataset we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](#). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
 
 ## Download checkpoints
 
-We start our R-CNN training from a backbone pretrained in a self-supervised manner, specifically, MoCo v2. For that, please download 800-epoch weights from their official repository using [this link](https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar) (obtained from [this table](https://github.com/facebookresearch/moco#models)), clone the [official moco repository](https://github.com/facebookresearch/moco), and [run a script as described here](https://github.com/facebookresearch/moco/tree/main/detection) to convert the weights to the Detectron2 format.
+We start our R-CNN training from a backbone pretrained in a self-supervised manner, specifically, MoCo v2. For that, please download 800-epoch weights from MoCo official repository or using [this link](https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar) (obtained from [this table](https://github.com/facebookresearch/moco#models)), clone the [official moco repository](https://github.com/facebookresearch/moco), and [run a script as described here](https://github.com/facebookresearch/moco/tree/main/detection) to convert the weights to the Detectron2 format.
 
-# Running scripts
+# Running experiments
 
 We use [Detectron2's lazy configuration](https://detectron2.readthedocs.io/en/latest/tutorials/lazyconfigs.html) to define our framework. The configurations are located in `configs/` folder and the root config files can be found in `config/train/`.
 
@@ -73,4 +86,15 @@ python tools/train_discovery.py \
     model_supervised.roi_heads.box_predictor.discovery_model.memory_batches=100 \
     model_supervised.roi_heads.box_predictor.discovery_model.memory_patience=150
 
+```
+
+# Citation
+If you find RNCDL useful in your research or reference it in your work, please star our repository and use the folowing:
+```
+@inproceedings{fomenko2022learning,
+    author = {Volodymyr Fomenko and Ismail Elezi and Deva Ramanan and Aljo\v{s}a O\v{s}ep and Laura Leal-Taix{'e}},
+    title = {Learning to Discover and Detect Objects},
+    booktitle={Advances in Neural Information Processing Systems},
+    year = {2022}
+}
 ```
