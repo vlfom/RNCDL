@@ -8,8 +8,8 @@ This repository provides the official implementation of the following paper:
 [Vladimir Fomenko](https://github.com/vlfom/),
 [Ismail Elezi](https://dvl.in.tum.de/team/elezi/),
 [Deva Ramanan](https://www.cs.cmu.edu/~deva/),
-[Aljoša Ošep](https://dvl.in.tum.de/team/osep/),
-[Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/) <br/>
+[Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/),
+[Aljoša Ošep](https://dvl.in.tum.de/team/osep/) <br/>
 In Advances in Neural Information Processing Systems 35 (NeurIPS 2022). <br/>
 [Project page](https://vlfom.github.io/RNCDL/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
 
@@ -89,7 +89,7 @@ python tools/train_discovery.py \
 If you find RNCDL useful in your research or reference it in your work, please star our repository and use the folowing:
 ```
 @inproceedings{fomenko2022learning,
-    author = {Volodymyr Fomenko and Ismail Elezi and Deva Ramanan and Aljo\v{s}a O\v{s}ep and Laura Leal-Taix{'e}},
+    author = {Volodymyr Fomenko and Ismail Elezi and Deva Ramanan and Laura Leal-Taix{'e} and Aljo\v{s}a O\v{s}ep},
     title = {Learning to Discover and Detect Objects},
     booktitle={Advances in Neural Information Processing Systems},
     year = {2022}
