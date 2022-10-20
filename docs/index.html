@@ -13,8 +13,9 @@
 
     <style type="text/css">
         body {
-            font-family: "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
             font-weight: 300;
+            letter-spacing: 0.1px;
             font-size: 18px;
             margin-left: auto;
             margin-right: auto;
@@ -119,6 +120,7 @@
             text-align: justify;
             width: 900px;
             font-size: 18px;
+            line-height: 23px;
         }
 
         .framework-teaser-img,
@@ -134,6 +136,7 @@
             text-align: justify;
             width: 900px;
             font-size: 18px;
+            line-height: 23px;
         }
 
         .results-content {
@@ -147,6 +150,7 @@
             text-align: justify;
             vertical-align: top;
             font-size: 18px;
+            line-height: 23px;
         }
 
         .results-img {
@@ -169,12 +173,14 @@
 
         .footer-content {
             width: 1100px;
+            line-height: 23px;
         }
 
         .footer-text {
             width: 780px;
             padding-left: 20px;
             font-size: 20px;
+            line-height: 30px;
         }
 
     </style>
@@ -295,10 +301,10 @@
                 <a href="https://nips.cc/Conferences/2022/">🌐 NeurIPS 2022</a>
             </td>
             <td align="center">
-                <a href="#">📄 Paper</a>
+                <a href="https://arxiv.org/abs/2210.10774">📄 Paper</a>
             </td>
             <td align="center">
-                <a href="#">💻 Source code</a>
+                <a href="https://github.com/vlfom/RNCDL">💻 Source code</a>
             </td>
         </tr>
     </table>
@@ -315,26 +321,10 @@
         </center>
         <div class="abstract">
             <span>
-                We tackle the problem of <div class="hlight">novel class discovery, detection, and localization (NCDL)
-                </div>. In this setting, we
-                assume a source dataset with labels for objects of commonly observed classes. Instances of other classes
-                need to be discovered, classified, and localized automatically based on visual similarity, without human
-                supervision. To this end, <div class="hlight">we propose a two-stage object detection network RNCDL
-                </div>, that
-                uses a region proposal network to localize potential objects and classify them. We train our network to
-                classify each proposal, either as one of the known classes, seen in the source dataset, or one of the
-                extended set of novel classes with a constraint that the distribution of class assignments should follow
-                natural long-tail distributions common in the real open-world. By training our detection network with
-                this objective in an end-to-end manner, it learns to classify all region proposals for a large variety
-                of classes, including those that are not part of the labeled object class vocabulary.
+                We tackle the problem of <div class="hlight">novel class discovery, detection, and localization (NCDL)</div>. In this setting, we assume a source dataset with labels for objects of commonly observed classes. Instances of other classes need to be discovered, classified, and localized automatically based on visual similarity, without human supervision. To this end, we propose a <div class="hlight">two-stage object detection network Region-based NCDL (RNCDL)</div>, that uses a region proposal network to localize object candidates and is trained to classify each candidate, either as one of the known classes, seen in the source dataset, or one of the extended set of novel classes, with a long-tail distribution constraint on the class assignments, reflecting the natural frequency of classes in the real world. By training our detection network with this objective in an end-to-end manner, it learns to classify all region proposals for a large variety of classes, including those that are not part of the labeled object class vocabulary.
             </span>
             <div style="margin-top: 10px;">
-                Our experiments
-                conducted using <div class=" hlight">COCO</div> and <div class=" hlight">LVIS</div> datasets reveal that our method is significantly more effective compared
-                to multi-stage pipelines that rely on traditional clustering algorithms or self-supervised contrastive
-                learning methods and operate on pre-extracted crops. Beyond that, we demonstrate the generality of our
-                approach by applying our method to a large-scale <div class=" hlight">Visual Genome</div> dataset, where our network successfully
-                learns to detect various semantic classes without explicit supervision.
+                Our experiments conducted using <div class=" hlight">COCO</div> and <div class=" hlight">LVIS</div> datasets reveal that our method is significantly more effective compared to multi-stage pipelines that rely on traditional clustering algorithms or use pre-extracted crops. Furthermore, we demonstrate the generality of our approach by applying our method to a large-scale <div class=" hlight">Visual Genome</div> dataset, where our network successfully learns to detect various semantic classes without explicit supervision.
             </div>
         </div>
     </center>
@@ -415,10 +405,10 @@
                         <td></td>
                         <td class="footer-text">
                                 <div>Vladimir Fomenko, Ismail Elezi, Deva Ramanan, Laura Leal-Taixé, Aljoša Ošep</div>
-                                <a href="#">Learning to Discover and Detect Objects</a>
+                                <a href="https://vlfom.github.io/RNCDL/">Learning to Discover and Detect Objects</a>
                                 <div><i>Advances in Neural Information Processing Systems 35 (NeurIPS 2022)</i></div>
-                                <a href="#">📄 Paper</a>
-                                <a href="#">💻 Code</a>
+                                <a href="https://arxiv.org/abs/2210.10774">📄 Paper</a>
+                                <a href="https://github.com/vlfom/RNCDL">💻 Code</a>
                         </td>
                     </tr>
                 </tbody>

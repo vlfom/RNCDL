@@ -11,7 +11,7 @@ This repository provides the official implementation of the following paper:
 [Laura Leal-Taixé](https://dvl.in.tum.de/team/lealtaixe/),
 [Aljoša Ošep](https://dvl.in.tum.de/team/osep/) <br/>
 In Advances in Neural Information Processing Systems 35 (NeurIPS 2022). <br/>
-[Project page](https://vlfom.github.io/RNCDL/) | [Paper](#) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
+[Project page](https://vlfom.github.io/RNCDL/) | [Paper](https://arxiv.org/abs/2210.10774) | [Source code](https://github.com/vlfom/rncdl) | [Poster](#) | [Presentation](#) <br/>
 
 > **Abstract**: We tackle the problem of novel class discovery, detection, and localization (NCDL). In this setting, we assume a source dataset with labels for objects of commonly observed classes. Instances of other classes need to be discovered, classified, and localized automatically based on visual similarity, without human supervision. To this end, we propose a two-stage object detection network RNCDL, that uses a region proposal network to localize potential objects and classify them. We train our network to classify each proposal, either as one of the known classes, seen in the source dataset, or one of the extended set of novel classes with a constraint that the distribution of class assignments should follow natural long-tail distributions common in the real open-world. By training our detection network with this objective in an end-to-end manner, it learns to classify all region proposals for a large variety of classes, including those that are not part of the labeled object class vocabulary.
 
@@ -25,7 +25,7 @@ For COCO + LVIS experiments, download COCO and LVIS datasets as instructed in th
 
 **Note on LVIS + VisualGenome experiments:** LVIS and VisualGenome datasets largely overlap (50K images). VisualGenome does not provide a default train-val split and for our setup we devised a specific split so that the validation images are those that appear in LVIS validation split and can be found in VisualGenome. For more details, please see our paper (supplementary).
 
-For LVIS + VisualGenome experiments, first download LVIS dataset as instructed above. For VisualGenome dataset we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](#). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
+For LVIS + VisualGenome experiments, first download LVIS dataset as instructed above. For VisualGenome dataset we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](#) (TODO). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
 
 ## Download checkpoints
 
@@ -85,11 +85,15 @@ python tools/train_discovery.py \
 
 ```
 
+# Trained models' weights
+
+We plan to release the trained models' weights before the beginning of the conference, which is late Fall.
+
 # Citation
 If you find RNCDL useful in your research or reference it in your work, please star our repository and use the folowing:
 ```
 @inproceedings{fomenko2022learning,
-    author = {Volodymyr Fomenko and Ismail Elezi and Deva Ramanan and Laura Leal-Taix{'e} and Aljo\v{s}a O\v{s}ep},
+    author = {Vladimir Fomenko and Ismail Elezi and Deva Ramanan and Laura Leal-Taix{'e} and Aljo\v{s}a O\v{s}ep},
     title = {Learning to Discover and Detect Objects},
     booktitle={Advances in Neural Information Processing Systems},
     year = {2022}
