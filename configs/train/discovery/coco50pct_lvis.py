@@ -8,7 +8,6 @@ from detectron2.data import (
     build_detection_test_loader,
     get_detection_dataset_dicts,
 )
-from detectron2.evaluation import LVISEvaluator
 from fvcore.common.param_scheduler import CosineParamScheduler
 
 from discovery.data.discovery_data_processor import DiscoveryDataProcessor

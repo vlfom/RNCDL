@@ -7,7 +7,7 @@
 from detectron2.config import LazyCall as L
 from detectron2.evaluation import COCOEvaluator
 
-from configs.train.fully_supervised.it180k_bs16 import lr_multiplier, optimizer, train, dataloader
+from configs.train.fully_supervised.lvis import lr_multiplier, optimizer, train, dataloader
 from configs.models.mask_rcnn_fpn_discovery import model
 
 # Update datasets for training and validation

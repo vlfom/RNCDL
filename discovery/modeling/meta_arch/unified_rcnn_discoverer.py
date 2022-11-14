@@ -7,7 +7,6 @@ from detectron2.modeling.meta_arch import GeneralizedRCNN
 from discovery.modeling.meta_arch.gt_prediction_extraction_rcnn import GTPredictionExtractionRCNN
 from discovery.modeling.meta_arch.feature_extraction_rcnn import FeatureExtractionRCNN, FeatureExtractionROIHeadsWrapper
 from discovery.modeling.roi_heads.class_agnostic_fast_rcnn_discovery_output_layers_wrapper import ClassAgnosticFastRCNNDiscoveryOutputLayersWrapper
-from discovery.modeling.roi_heads.centernet2_cascade_heads import CenterNet2CascadeROIHeads
 
 
 class ForwardMode:
@@ -18,7 +17,6 @@ class ForwardMode:
     DISCOVERY_CLASSIFIER = 4
     DISCOVERY_GT_CLASS_PREDICTIONS_EXTRACTION = 5
     DISCOVERY_INFERENCE = 6
-    DISCOVERY_INFERENCE_PL = 6
 
 
 class DiscoveryRCNN(nn.Module):
@@ -186,19 +184,12 @@ class DiscoveryRCNN(nn.Module):
 
         with torch.no_grad():
             for box_predictor in box_predictors:
-                if box_predictor.discovery_model.labeled_mode == "fc":
-                    box_predictor.discovery_model.head_lab.weight = nn.Parameter(
-                        box_predictor.discovery_model.head_lab.weight[:-1]
-                    )
-                    box_predictor.discovery_model.head_lab.bias = nn.Parameter(
-                        box_predictor.discovery_model.head_lab.bias[:-1]
-                    )
-                elif box_predictor.discovery_model.labeled_mode == "cosine":
-                    box_predictor.discovery_model.head_lab.prototypes.weight = nn.Parameter(
-                        box_predictor.discovery_model.head_lab.prototypes.weight[:-1]
-                    )
-                else:
-                    raise ValueError()
+                box_predictor.discovery_model.head_lab.weight = nn.Parameter(
+                    box_predictor.discovery_model.head_lab.weight[:-1]
+                )
+                box_predictor.discovery_model.head_lab.bias = nn.Parameter(
+                    box_predictor.discovery_model.head_lab.bias[:-1]
+                )
 
 
     def set_default_forward_mode(self, mode):

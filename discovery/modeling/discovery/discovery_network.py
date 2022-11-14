@@ -90,7 +90,6 @@ class DiscoveryClassifier(nn.Module):
     def __init__(
             self,
             num_labeled,
-            labeled_mode,
             num_unlabeled,
             feat_dim,
             hidden_dim,
@@ -111,11 +110,7 @@ class DiscoveryClassifier(nn.Module):
     ):
         super().__init__()
 
-        self.labeled_mode = labeled_mode
-        if labeled_mode == "cosine":
-            self.head_lab = Prototypes(feat_dim, num_labeled)
-        else:
-            self.head_lab = nn.Linear(feat_dim, num_labeled)
+        self.head_lab = nn.Linear(feat_dim, num_labeled)
 
         self.head_unlab = MultiHead(
             input_dim=feat_dim,
@@ -189,15 +184,11 @@ class DiscoveryClassifier(nn.Module):
 
     @torch.no_grad()
     def normalize_prototypes(self):
-        if self.labeled_mode == "cosine":
-            self.head_lab.normalize_prototypes()
         self.head_unlab.normalize_prototypes()
 
     def forward_knowns_bg_head_single_view(self, x):
         self.normalize_prototypes()
         logits = self.head_lab(x)
-        if self.labeled_mode == "cosine":
-            logits /= self.temperature
         return logits
 
     def forward_heads_single_view(self, x):
@@ -208,8 +199,6 @@ class DiscoveryClassifier(nn.Module):
         # Knowns head
         logits_knowns = self.head_lab(x)
         logits_knowns = logits_knowns[None, :, :]  # Make shape-compatible with multi-head novels heads
-        if self.labeled_mode == "cosine":
-            logits_knowns /= self.temperature
 
         # Novels heads
         logits_novels = self.head_unlab(x)[0] / self.temperature
@@ -224,8 +213,6 @@ class DiscoveryClassifier(nn.Module):
 
     def forward_heads(self, feats):
         logits_lab = self.head_lab(feats)
-        if self.labeled_mode == "cosine":
-            logits_lab /= self.temperature
         logits_unlab, _ = self.head_unlab(feats)
         logits_unlab /= self.temperature
 
@@ -276,8 +263,6 @@ class DiscoveryClassifier(nn.Module):
                     # Use extra features from memory
                     mem_feat = self.memory_feat[v]  # get memory features for the current view
                     mem_logits_lab = self.head_lab(mem_feat)                                           # get logits for knowns
-                    if self.labeled_mode == "cosine":
-                        mem_logits_lab /= self.temperature
 
                     mem_logits_unlab, _ = self.head_unlab.forward_head(h, mem_feat)                    # get logits for novels
                     mem_logits_unlab /= self.temperature

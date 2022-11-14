@@ -12,8 +12,10 @@
     <link rel="icon" href="assets/favicon.ico">
 
     <style type="text/css">
+        @import url('https://fonts.cdnfonts.com/css/roboto');
+
         body {
-            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-weight: 300;
             letter-spacing: 0.1px;
             font-size: 18px;
@@ -114,6 +116,10 @@
             font-size: 18px;
         }
 
+        .text {
+            font-weight: 300 !important;
+        }
+
         .abstract {
             margin-top: 25px;
             margin-bottom: 35px;
@@ -121,6 +127,7 @@
             width: 900px;
             font-size: 18px;
             line-height: 23px;
+            font-weight: 100 !important;
         }
 
         .framework-teaser-img,
@@ -201,31 +208,31 @@
                 <td align="center">
                     <span>
                         <a href="https://github.com/vlfom/" target="_blank">Vladimir Fomenko</a>
-                        <sup>1*</sup>
+                        <sup>3*</sup>
                     </span>
                 </td>
                 <td align="center">
                     <span>
                         <a href="https://dvl.in.tum.de/team/elezi/" target="_blank">Ismail Elezi</a>
-                        <sup>2</sup>
+                        <sup>1</sup>
                     </span>
                 </td>
                 <td align="center">
                     <span>
                         <a href="https://www.cs.cmu.edu/~deva/" target="_blank">Deva Ramanan</a>
-                        <sup>3, 4</sup>
+                        <sup>2</sup>
                     </span>
                 </td>
                 <td align="center">
                     <span>
                         <a href="https://dvl.in.tum.de/team/lealtaixe/" target="_blank">Laura Leal-Taixé</a>
-                        <sup>2, 4</sup>
+                        <sup>1</sup>
                     </span>
                 </td>
                 <td align="center">
                     <span>
                         <a href="https://dvl.in.tum.de/team/osep/" target="_blank">Aljoša Ošep</a>
-                        <sup>2, 3, 4</sup>
+                        <sup>1, 1</sup>
                     </span>
                 </td>
             </tr>
@@ -236,16 +243,13 @@
         <tbody>
             <tr>
                 <td>
-                    <center><span>Microsoft Azure AI<sup> 1</sup></span></center>
-                </td>
-                <td>
                     <center><span>Technical University of Munich<sup> 2</sup></span></center>
                 </td>
                 <td>
                     <center><span>Carnegie Mellon University<sup> 3</sup></span></center>
                 </td>
                 <td>
-                    <center><span>Argo AI<sup> 4</sup></span></center>
+                    <center><span>Microsoft Azure AI<sup> 1</sup></span></center>
                 </td>
             </tr>
         </tbody>
@@ -286,11 +290,6 @@
                         <img alt="Microsoft Azure AI" src="./assets/logos/microsoft.png" width="120">
                     </a>
                 </td>
-                <td align="center">
-                    <a href="https://www.argo.ai/" target="_blank">
-                        <img alt="CMU" src="./assets/logos/argo.png" width="70">
-                    </a>
-                </td>
             </tr>
         </tbody>
     </table>
@@ -306,6 +305,9 @@
             <td align="center">
                 <a href="https://github.com/vlfom/RNCDL">💻 Source code</a>
             </td>
+            <td align="center">
+                <a href="https://www.youtube.com/watch?v=zWpUnXNplfQ">📽 Video</a>
+            </td>
         </tr>
     </table>
 
@@ -320,10 +322,10 @@
             Abstract
         </center>
         <div class="abstract">
-            <span>
+            <span class="text">
                 We tackle the problem of <div class="hlight">novel class discovery, detection, and localization (NCDL)</div>. In this setting, we assume a source dataset with labels for objects of commonly observed classes. Instances of other classes need to be discovered, classified, and localized automatically based on visual similarity, without human supervision. To this end, we propose a <div class="hlight">two-stage object detection network Region-based NCDL (RNCDL)</div>, that uses a region proposal network to localize object candidates and is trained to classify each candidate, either as one of the known classes, seen in the source dataset, or one of the extended set of novel classes, with a long-tail distribution constraint on the class assignments, reflecting the natural frequency of classes in the real world. By training our detection network with this objective in an end-to-end manner, it learns to classify all region proposals for a large variety of classes, including those that are not part of the labeled object class vocabulary.
             </span>
-            <div style="margin-top: 10px;">
+            <div style="margin-top: 10px;" class="text">
                 Our experiments conducted using <div class=" hlight">COCO</div> and <div class=" hlight">LVIS</div> datasets reveal that our method is significantly more effective compared to multi-stage pipelines that rely on traditional clustering algorithms or use pre-extracted crops. Furthermore, we demonstrate the generality of our approach by applying our method to a large-scale <div class=" hlight">Visual Genome</div> dataset, where our network successfully learns to detect various semantic classes without explicit supervision.
             </div>
         </div>
@@ -334,7 +336,7 @@
     <center class="framework-overview">
         <div class="framework-overview-title">Task and framework overview</div>
         <img src="./assets/figures/teaser.webp" class="framework-teaser-img">
-        <div class="framework-overview-note">
+        <div class="framework-overview-note" class="text">
             In <div class=" hlight">novel class discovery and localization</div> task we assume given a labeled images
             pool containing annotations for <i>known</i>, frequently observed semantic classes, and unlabeled images pool
             that may contain instances of <i>novel</i> classes. Our network learns to localize and recognize common semantic
@@ -347,14 +349,14 @@
     <center class="our-approach">
         <div class="our-approach-title">Our approach: Region-based Novel Category Discovery and Localization (RNCDL)</div>
         <img src="./assets/figures/framework_overview.webp" class="our-approach-img">
-        <div class="our-approach-note">
+        <div class="our-approach-note" class="text">
             <div>
                 <div class=" hlight">Top:</div> during supervised training phase, we train our backbone and RPN
                 networks using labeled data, together with classification head and a class agnostic localization head. During
                 discovery phase, we freeze all the layers of the network apart from classification head and attach and train a
                 novel classification head using unlabeled data.
             </div>
-            <div style="margin-top: 10px">
+            <div style="margin-top: 10px" class="text">
                 <div class="hlight">Bottom:</div> during inference phase, we perform a standard R-CNN pass, using
                 classification heads of both known and novel categories to predict a class assignment for each proposal.
                 This can be either one of K classes, that were presented a labeled samples during the model training, or any
@@ -368,11 +370,11 @@
     <center class=" results">
         <div class="results-title">Results</div>
         <div class="results-content">
-            <div class="results-note">
+            <div class="results-note" class="text">
                 <div>
                     We evaluate our method on <div class=" hlight">COCO</div> and <div class=" hlight">LVIS</div> datasets, where we use random 50% of COCO dataset during the supervised phase, and the rest unlabeled images during the discovery phase. We compare our method with k-means baselines and three recent state-of-the-art methods that we adapted to our scenario. We present the results for both known (COCO) and unknown (the rest of LVIS) classes. In the manuscript, we provide additional results on the Visual Genome dataset.
                 </div>
-                <div style="margin-top: 10px">
+                <div style="margin-top: 10px" class="text">
                     Our method <div class=" hlight">significantly outperforms</div> <div class=" hlight">baselines and SOTA</div> methods: the previous best NCD method UNO, by reaching 4.74 higher overall mAP, and approach by Weng et al.
                 </div>
             </div>
@@ -385,10 +387,7 @@
     <center class="video">
         <div class="video-title">Video presentation</div>
         <div class="video-content">
-            Video is to be released soon.
-            <!-- <video width="854px" height="480px" controls>
-                <source src="./assets/videos/xxx.mp4" type="video/mp4">
-            </video> -->
+            <iframe width="854px" height="480px" src="https://www.youtube.com/embed/zWpUnXNplfQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </center>
 
@@ -403,12 +402,14 @@
                             <img class="paperpreview-img" src="./assets/figures/paper_preview.webp">
                         </td>
                         <td></td>
-                        <td class="footer-text">
+                        <td class="footer-text text">
                                 <div>Vladimir Fomenko, Ismail Elezi, Deva Ramanan, Laura Leal-Taixé, Aljoša Ošep</div>
                                 <a href="https://vlfom.github.io/RNCDL/">Learning to Discover and Detect Objects</a>
                                 <div><i>Advances in Neural Information Processing Systems 36 (NeurIPS 2022)</i></div>
                                 <a href="https://arxiv.org/abs/2210.10774">📄 Paper</a>
                                 <a href="https://github.com/vlfom/RNCDL">💻 Code</a>
+                                <a href="https://www.youtube.com/watch?v=zWpUnXNplfQ">📽 Video</a>
+                                <a href="https://drive.google.com/file/d/1gDwgv-nKM3btpCqPU98RdC7ztuHu2cYF/view">🖼️ Poster</a>
                         </td>
                     </tr>
                 </tbody>

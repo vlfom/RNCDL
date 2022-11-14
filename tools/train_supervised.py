@@ -14,7 +14,6 @@ in the config file and implement a new train_net.py to handle them.
 """
 import os
 import logging
-import wandb
 import torch.distributed as dist
 
 from detectron2.checkpoint import DetectionCheckpointer
@@ -115,10 +114,6 @@ def main(args):
     cfg = LazyConfig.load(args.config_file)
     cfg = LazyConfig.apply_overrides(cfg, args.opts)
     default_setup(cfg, args)
-
-    if args.num_gpus * args.num_machines == 1 or dist.get_rank() == 0:
-        _mode = "online" if cfg.train.use_wandb else "disabled"
-        wandb.init(project=cfg.train.wandb_project_name, name=cfg.train.exp_name, config=args, mode=_mode)
 
     if args.eval_only:
         model = instantiate(cfg.model)

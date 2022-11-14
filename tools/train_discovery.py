@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import logging
-import wandb
 import torch.distributed as dist
 import torch.nn as nn
 
@@ -175,10 +174,6 @@ def main(args):
     cfg = LazyConfig.load(args.config_file)
     cfg = LazyConfig.apply_overrides(cfg, args.opts)
     default_setup(cfg, args)
-
-    if dist.get_rank() == 0:
-        _mode = "online" if cfg.train.use_wandb else "disabled"
-        wandb.init(project=cfg.train.wandb_project_name, name=cfg.train.exp_name, config=args, mode=_mode)
 
     do_train(args, cfg)
 

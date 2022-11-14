@@ -1,6 +1,7 @@
-# Common training-related configs that are designed for "tools/train_supervised.py"
-# You can use your own instead, together with your own train_net.py
-train = dict(
+from omegaconf import OmegaConf
+
+
+train = OmegaConf.create(dict(
     output_dir="./output",
     init_checkpoint="",
     max_iter=90000,
@@ -16,4 +17,4 @@ train = dict(
     log_period=20,
     device="cuda"
     # ...
-)
+))

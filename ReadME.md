@@ -17,19 +17,80 @@ In Advances in Neural Information Processing Systems 36 (NeurIPS 2022). <br/>
 
 # Installation
 
-Our implementation is based on the [Detectron2](https://github.com/facebookresearch/detectron2) framework. Please follow [Detectron2's setup guide](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) and pick the **CUDA=11.3** and **torch=1.10** versions (`python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html` may work). We do not require any additional dependencies, apart from the default ones used by Detectron2.
+Our implementation is based on the [Detectron2 v0.6](https://github.com/facebookresearch/detectron2) framework. For our experiments we followed [Detectron2's setup guide](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) and picked the **CUDA=11.3** and **torch=1.10** versions (`python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html` may work). Other Detectron2 versions should work as well, but we did not test them. All the additional dependencies we put to `requirements.txt`. We used Python 3.8 for all experiments.
+
+## Inplace modifications of Detectron2
+
+After installing the `detectron2` package, we require several small modifications to the library in order to speed-up evaluation procedures. To identiy `detectron2`'s installation folder, you can use `pip show detectron2` (example output is: `anaconda/envs/d2/lib/python3.8/site-packages/detectron2`).
+
+**Speeding up the evaluation by increasing batch size.** Open the `data/build.py` file (i.e. `../site-packages/detectron2/data/build.py`..). Inside, modify the `build_detection_test_loader` function as follows:
+- add `batch_size` argument with a default value of `1` to the function definition (for backward compatibility)
+- in the final `return` statement, replace `batch_size=1` with `batch_size=batch_size`
+
+### VisualGenome experiments
+
+To run VisualGenome experiments, we require further modifications to the Detectron2 source code. In LVIS + VisualGenome setup we support supervised training phase with mask annotations from LVIS (to train class-agnostic mask head). However, VisualGenome annotations (used for evaluation) don't contain masks. This causes issues during data loading, as some images contain masks, and some not. To support such case we require modification of `../site-packages/detectron2/datasets/lvis.py`, line 150, by adding an `if` statement to check if segmentation mask is present in a given annotation:
+
+```python
+if "segmentation" in anno:
+    segm = anno["segmentation"]  # list[list[float]]
+    ...
+    obj["segmentation"] = segm
+for extra_ann_key in extra_annotation_keys:
+    ...
+```
 
 ## Download datasets
 
-For COCO + LVIS experiments, download COCO and LVIS datasets as instructed in the [Detectron2 data documentation](https://detectron2.readthedocs.io/en/latest/tutorials/builtin_datasets.html).
+### COCO + LVIS experiments
 
-**Note on LVIS + VisualGenome experiments:** LVIS and VisualGenome datasets largely overlap (50K images). VisualGenome does not provide a default train-val split and for our setup we devised a specific split so that the validation images are those that appear in LVIS validation split and can be found in VisualGenome. For more details, please see our paper (supplementary).
+For COCO + LVIS experiments, first download COCO images + annotations and LVIS annotations as instructed in the [Detectron2 data documentation](https://detectron2.readthedocs.io/en/latest/tutorials/builtin_datasets.html). For COCO, please download **COCO 2017** data with standard train/val annotations.
 
-For LVIS + VisualGenome experiments, first download LVIS dataset as instructed above. For VisualGenome dataset we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](#) (TODO). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
+After downloading and extracting the standard datasets, please download the additional annotations for the COCO<sub>half</sub> dataset introduced in our paper: [coco_half_train.json](https://drive.google.com/file/d/1abBlME4Z5ggBUsmeO6o_trWvCrLzn7p1/view?usp=share_link) and [coco_half_val.json](https://drive.google.com/file/d/1G4pvMNJHJ9w37sTYqONafAtowSYecSi0/view?usp=share_link). Place them in the `coco/annotations/` folder. If you want to check how this dataset is registered by Detectron2, please see `configs/data/register_coco_half.py` script for details. This script is automatically called during training.
+
+### LVIS + VisualGenome experiments
+
+For **LVIS + VisualGenome experiments**, first download LVIS dataset as instructed above. For VisualGenome dataset we use the same set of images that are available for COCO dataset. we had to pre-process it to match the Detectron2 format and thus it's required to download our custom annotation files in addition to the images provided in the original dataset. First, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html). Then, put them **in the same folder where LVIS images are located**. Then, download our prepared annotations from [this link](TODO). Put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
+
+As LVIS and VisualGenome datasets largely overlap (50K images) and VisualGenome does not provide a default train-val split, for our work we devised a specific split. We selected our split so that the validation images for LVIS + VisualGenome setup are a subset of LVIS validation images. Specifically, we use LVIS validation images that can also be found in VisualGenome. For more details, please see our paper (supplementary).
+
+First, download COCO and LVIS datasets as instructed above. Then, download the VisualGenome images v1.2 from the [official website](https://visualgenome.org/api/v0/api_home.html) and put all images **in a `visualgenome/` subfolder of a folder where COCO images are located**. By default, that would correspond to `$DETECTRON2_DATASETS$/coco/visualgenome/`, so an example image path would be `$DETECTRON2_DATASETS$/coco/visualgenome/2386299.jpg`.
+
+For annotations, we had to pre-process official VisualGenome annotations to match the Detectron2 format. Please, download our custom annotation files [visualgenome_train.json](https://drive.google.com/file/d/1cqAXbSPXq0JrwxVWNkNbhIqwJql6tBgG/view?usp=share_link) and [visualgenome_val.json](https://drive.google.com/file/d/1XQKl2FOQY6pn6h-lh7QwN0baTalzgIs3/view?usp=share_link) and put them to the `$DETECTRON2_DATASETS$/visualgenome/` folder (if you want to use a different folder, please modify `configs/data/register_vglvis.py` file accordingly).
+
+The final structure of your `DETECTRON2_DATASETS` folder should be the following:
+- `coco/`
+  - `annotations/`
+    - `coco_half_train.json`
+    - `coco_half_val.json`
+    - `..original coco annotations (optional)..`
+  - `train2017/`
+  - `val2017/`
+- `lvis/`
+  - `lvis_v1_val.json`
+  - `lvis_v1_train.json`
+- `visualgenome/`
+  - `visualgenome_train.json`
+  - `visualgenome_val.json`
 
 ## Download checkpoints
 
-We start our R-CNN training from a backbone pretrained in a self-supervised manner, specifically, MoCo v2. For that, please download 800-epoch weights from MoCo official repository or using [this link](https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar) (obtained from [this table](https://github.com/facebookresearch/moco#models)), clone the [official moco repository](https://github.com/facebookresearch/moco), and [run a script as described here](https://github.com/facebookresearch/moco/tree/main/detection) to convert the weights to the Detectron2 format.
+### Self-supervised backbone initialization
+
+During the first, supervised phase, we start initialize R-CNN from weights pretrained in a self-supervised manner, specifically, MoCo v2. In the table in the next sub-section, **we provide pre-downloaded weights**. However, if you'd like to obtain the weights from the official MoCo v2 repository, please follow the next paragraph.
+
+To obtain the original MoCo v2 weights, please download 800-epoch weights from MoCo official repository from [this table](https://github.com/facebookresearch/moco#models). Then, clone the [official moco repository](https://github.com/facebookresearch/moco), and [run a script as described here](https://github.com/facebookresearch/moco/tree/main/detection) to convert the weights to the Detectron2 format.
+
+### Pretrained model weights
+
+Below we provide weights for some of the trained models. For more details on the models' hyperparameters, please see our manuscript. Unfortunately, we cannot provide the weights for the original network described in the manuscript, but to reproduce our results, we have trained another network for 7500 iterations, and provide its weights. It can surpass the scores mentioned in the paper and achieves **7.35** mAP on all classes.
+
+| Description | Link | Scores |
+| --- | --- | --- |
+| Pretrained MoCo v2 ResNet [official moco repository](https://github.com/facebookresearch/moco) used for backbone initialization | [`moco_v2_800ep_pretrain.pkl`](https://drive.google.com/file/d/1GzslI_Npk197QVwvfGfdONf91YeE9pXh/view?usp=sharing) | N/A |
+| Fully-supervised Mask-RCNN with FPN and Res50 backbone, trained on COCO<sub>half</sub> dataset, used as the initialization for the discovery phase | [`supervised_cocohalf_maskrcnn.pth`](https://drive.google.com/file/d/1SRpHQBcCGz3cHPniFKq6yk1U5-mOOyOA/view?usp=share_link) | mAP<sub>COCO<sub>half</sub></sub>: 35.69 |
+| Fully-supervised Mask-RCNN with FPN and Res50 backbone, trained on LVIS dataset, used as the initialization for the discovery phase | [`supervised_lvis_maskrcnn.pth`](https://drive.google.com/file/d/1OtQs_9UADQGbGvJPQnc8fXrpenqMguFQ/view?usp=share_link) | mAP<sub>LVIS</sub>: 18.47 |
+| RNCDL network trained for discovery mode on COCO<sub>half</sub> and the rest of unlabeled images with the number of unlabeled classes set to 3000 | [`discovery_cocohalf_lvis_maskrcnn_lr3e-2_iter7500.pth`](https://drive.google.com/file/d/1vhFFNZSjpBbfWn-QjdRk9YW6eGFD7yRm/view?usp=share_link) | mAP<sub>COCO<sub>half</sub></sub>: 24.46, mAP<sub>LVIS</sub>: 5.94, mAP<sub>all</sub>: 7.35 |
 
 # Running experiments
 
@@ -41,6 +102,8 @@ All our experiments were tested on 4 NVIDIA A40 GPUs with 48G memory.
 To train our fully-supervised baselines, please use scripts in the `slurm_scripts/fully_supervised/` folder. E.g. to train a fully-supervised R-CNN on COCO<sub>half</sub> use:
 
 ```
+DETECTRON2_DATASETS=/path/to/datasets \
+PYTHONPATH=$PYTHONPATH:`pwd` \
 python tools/train_supervised.py \
     \
     --config-file ./configs/train/fully_supervised/coco50pct.py \
@@ -56,6 +119,8 @@ python tools/train_supervised.py \
 To train our discovery networks, please use scripts in the `slurm_scripts/discovery/` folder. E.g. to run discovery training for COCO<sub>half</sub> + LVIS setup use:
 
 ```
+DETECTRON2_DATASETS=/path/to/datasets \
+PYTHONPATH=$PYTHONPATH:`pwd` \
 python tools/train_discovery.py \
     \
     --config-file ./configs/train/discovery/coco50pct_lvis.py \
@@ -67,7 +132,7 @@ python tools/train_discovery.py \
     train.eval_period=999999 \
     discovery_evaluator.evaluator.output_dir=./output \
     \
-    train.init_checkpoint=./checkpoints/coco50pct_pretrain.pkl \
+    train.init_checkpoint=./checkpoints/supervised_cocohalf_maskrcnn.pth \
     train.max_iter=15000 \
     optimizer.lr=0.01 \
     train.seed=42 \
@@ -82,12 +147,41 @@ python tools/train_discovery.py \
     \
     model_supervised.roi_heads.box_predictor.discovery_model.memory_batches=100 \
     model_supervised.roi_heads.box_predictor.discovery_model.memory_patience=150
-
 ```
 
-# Trained models' weights
+To run discovery training for LVIS + VisualGenome setup, modify the command above as follows:
 
-We plan to release the trained models' weights before the beginning of the conference, which is late Fall.
+```
+...
+python tools/train_discovery.py \
+    \
+    --config-file ./configs/train/discovery/lvis_visualgenome.py \
+    ...
+    train.init_checkpoint=./checkpoints/supervised_lvis_maskrcnn.pth \
+    ...
+    model_supervised.roi_heads.box_predictor.discovery_model.num_unlabeled=5000 \
+    ...
+```
+
+## Evaluation issues
+
+Sometimes, after successfully finishing the discovery training phase and saving the weights, the model successfully produces the predictions for the labeled data with known classes, but hangs or crashes during evaluation on the unlabeled data.
+
+In this case, you may re-use the training script above with training_epochs set to 1 and learning rate and weight decay set to 0 so that the script will load the saved weights and run the evaluation only. E.g.:
+
+```
+...
+python tools/train_discovery.py \
+    ...
+    train.init_checkpoint="discovery_checkpoint.pth" \
+    ...
+    train.max_iter=1 \
+    optimizer.lr=0.0 \
+    optimizer.weight_decay=0.0 \
+    train.weights_mode="from_discovery"  @TODO: check this still exists
+```
+
+Even after this modification, **evaluation for the discovery part may take several hours**.
 
 # Citation
 If you find RNCDL useful in your research or reference it in your work, please star our repository and use the folowing:

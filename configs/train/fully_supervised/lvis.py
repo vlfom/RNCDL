@@ -19,7 +19,6 @@ from configs.models.mask_rcnn_fpn_discovery import model
 
 from discovery.data.discovery_data_processor import DiscoveryDataProcessor
 
-
 # Use AMP
 train.amp.enabled = True
 train.ddp.fp16_compression = True
@@ -36,10 +35,6 @@ dataloader.train.sampler = L(RepeatFactorTrainingSampler)(
         repeat_thresh=0.001
     )
 )
-
-# Wandb
-train.use_wandb = True
-train.wandb_project_name = "thesis-fall"
 
 ###
 ### LVIS-specific config
