@@ -104,7 +104,7 @@ class DiscoveryClassifier(nn.Module):
             batch_size,
 
             sk_mode="classical",
-            gauss_sd_sk_new=0.1,
+            gauss_sd_sk_new=0.5,
             lamb_sk_new=20,
             num_hidden_layers=1,
     ):
