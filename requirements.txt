@@ -3,7 +3,7 @@ lvis
 scipy
 
 # Detectron2 dependencies; note: we installed pytorch/cudatoolkit using conda, here we just list all the packages for reference
-pytorch==1.10.1
+torch==1.10.1
 torchvision==0.11.2
 torchaudio==0.10.1
 cudatoolkit==11.3
