@@ -14,7 +14,7 @@ from detectron2.data.datasets.builtin_meta import COCO_CATEGORIES, _get_coco_ins
 # - register_all_coco(): https://github.com/facebookresearch/detectron2/blob/cbbc1ce26473cb2a5cc8f58e8ada9ae14cb41052/detectron2/data/datasets/builtin.py#L106
 # - register_coco_instances(): https://github.com/facebookresearch/detectron2/blob/cbbc1ce26473cb2a5cc8f58e8ada9ae14cb41052/detectron2/data/datasets/coco.py#L479
 
-_root = os.getenv("DETECTRON2_DATASETS", "datasets")
+_root = os.getenv("DETECTRON2_DATASETS", "/home/data/Dataset/")
 
 # COCO 2017 train dataset with only 50% of images kept
 json_path_train = os.path.join(_root, "coco/annotations/coco_half_train.json")
